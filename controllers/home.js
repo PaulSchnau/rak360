@@ -19,3 +19,9 @@ exports.task = function(req, res) {
     title: 'Task'
   });
 };
+
+exports.watch = function(req, res) {
+  res.render('watch', {
+    title: 'Watch'
+  });
+};

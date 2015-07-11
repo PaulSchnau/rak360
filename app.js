@@ -116,6 +116,7 @@ app.get('/account/unlink/:provider', passportConf.isAuthenticated, userControlle
 
 app.get('/browse', homeController.browse);
 app.get('/task', homeController.task);
+app.get('/watch/:id', homeController.watch);
 
 
 

@@ -2,8 +2,8 @@ extends layout
 
 block content
   .page-header
-    p.lead Need Help?
-    p Post flare to ask for help.
+    p.lead Need Help? 
+      small Shoot a flare to ask for help.
   form(method='POST')
     input(type='hidden', name='_csrf', value=_csrf)
     .col-sm-8.col-sm-offset-2
@@ -15,7 +15,15 @@ block content
         input.form-control(type='text', name='zip', id='zip', placeholder='10013')
       .form-group
         label.control-label(for='duration') Duration
-        input.form-control(type='text', name='duration', id='duration', placeholder='30 Minutes')
+        select.form-control(type='text', name='duration', id='duration', placeholder='30 Minutes')
+          option(value='15') 15 Minutes
+          option(value='30') 30 Minutes 
+          option(value='60') 1 Hour
+          option(value='120') 2 Hours
+          option(value='240') 4 Hours
+      .form-group
+        label.control-label(for='description') Description
+        textarea.form-control(type='textarea', name='description', id='description', placeholder="I need to change the tire on my car, but I don't have a jack")
       .form-group
         button.btn.btn-primary(type='button' onClick="newTask()")
           | Post Flare
