@@ -1,6 +1,7 @@
 myLat = 40.7127;
 myLng = -74.0059;
 myUser = {}
+myUserRef = null;
 
 firebase = new Firebase("https://rak360.firebaseio.com/");
 firebase.onAuth(authDataCallback);
@@ -22,16 +23,27 @@ if (location.href.indexOf('watch') > 1){
 	watchTask();
 }
 
-window.onload = function() {
-  var startPos;
-  var geoSuccess = function(position) {
-  	myLat = position.coords.latitude;
-  	myLng = position.coords.longitude;
-    console.log(myLat);
-    console.log(myLng);
-  };
-  navigator.geolocation.getCurrentPosition(geoSuccess);
+
+navigator.geolocation.getCurrentPosition(function(position){
+	myLat = position.coords.latitude;
+	myLng = position.coords.longitude;
+	console.log(myLat);
+	console.log(myLng);
+	console.log(myUserRef);
+	if(myUserRef != null){
+		myUserRef.update({
+			lat: myLat,
+			lng: myLng
+		});
+	}
+});
+
+var showPosition = function(position) {
+
 };
+
+
+
 
 //////////////////////
 //////Functions///////
@@ -41,7 +53,7 @@ window.onload = function() {
 function authDataCallback(authData) {
   if (authData) {
   	userID = authData.uid;
-	var myUserRef = firebase.child('users').child(userID);
+	myUserRef = firebase.child('users').child(userID);
 	myUserRef.on('value', function(snapshot){
 		myUser = snapshot.val();
 		console.log(myUser);
@@ -175,7 +187,8 @@ function authFacebook(){
 	    console.log("Login Failed!", error);
 	  } else {
 	    console.log("Authenticated successfully with payload:", authData);
-	    firebase.child("users").child(authData.uid).set({
+	    myUserRef = firebase.child("users").child(authData.uid);
+	    myUserRef.update({
       		provider: authData.provider,
       		name: getName(authData),
       		image: authData.facebook.profileImageURL
