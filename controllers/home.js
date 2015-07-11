@@ -7,3 +7,15 @@ exports.index = function(req, res) {
     title: 'Home'
   });
 };
+
+exports.browse = function(req, res) {
+  res.render('browse', {
+    title: 'Browse'
+  });
+};
+
+exports.task = function(req, res) {
+  res.render('task', {
+    title: 'Task'
+  });
+};

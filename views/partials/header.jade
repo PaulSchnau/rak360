@@ -1,4 +1,5 @@
-.script(src="https://cdn.firebase.com/js/client/2.2.7/firebase.js")
+script(src='https://cdn.firebase.com/js/client/2.2.7/firebase.js')
+script(type='text/javascript', src='https://maps.googleapis.com/maps/api/js?key=')
 .navbar.navbar-default.navbar-fixed-top
   .container
     .navbar-header
@@ -9,20 +10,22 @@
         span.icon-bar
       a.navbar-brand(href='/')
         i.fa.fa-cube
-        | Project name
+        | RAK360
     .collapse.navbar-collapse
       ul.nav.navbar-nav
         li(class=title=='Home'?'active':undefined)
           a(href='/') Home
-        li(class=title=='API Examples'?'active':undefined)
+        li(class=title=='Browse'?'active':undefined)
+          a(href='/browse') Browse
+        //-li(class=title=='API Examples'?'active':undefined)
           a(href='/api') API Examples
-        li(class=title=='Contact'?'active':undefined)
+        //-li(class=title=='Contact'?'active':undefined)
           a(href='/contact') Contact
       ul.nav.navbar-nav.navbar-right
         if !user
           li(class=title=='Login'?'active':undefined)
-            a(href='/login') Login
-          li(class=title=='Create Account'?'active':undefined)
+            a(href='/') Login
+          //-li(class=title=='Create Account'?'active':undefined)
             a(href='/signup') Create Account
         else
           li.dropdown(class=title=='Account Management'?'active':undefined)
