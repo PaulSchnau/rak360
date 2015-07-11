@@ -6,6 +6,7 @@ userMarkers = {};
 trueLocation = false;
 taskID = null;
 taskRef = null;
+taskSelected = null;
 
 
 firebase = new Firebase("https://rak360.firebaseio.com/");
@@ -93,12 +94,9 @@ function authDataCallback(authData) {
 }
 
 function loadMapData(){
-	firebase.child("tasks").on("child_added", function(snapshot) {
+	firebase.child("tasks").on("child_added", function(snapshot, prevChildKey) {
 		task = snapshot.val();
-		console.log(task);
-		console.log(task.lat);
-		console.log(task.lng);
-		console.log('Adding marker');
+		task.id = prevChildKey;
 		addIncidentMarker(task);
 	});
 }
@@ -116,6 +114,12 @@ function addIncidentMarker(task){
 	google.maps.event.addListener(marker, 'click', function() {
 		infowindow.open(map,marker);
 	});
+
+	google.maps.event.addListener(marker, 'click', function() {
+    	taskSelected = task;
+    	map.setCenter(marker.getPosition());
+  	});
+
  	marker.setMap(map);
  	return marker;
 }
@@ -126,7 +130,7 @@ function incidentString(task){
  	contentString += '</div><div class="media-body"><div class="media-heading">';
  	contentString += '<h4>' + task.title + '</h4>';
  	contentString += '<p>' + task.user.name + '</p>';
- 	contentString += '<p>' + task.description + '</p>';
+ 	contentString += '<p>' + task.duration + ' Minutes - ' + task.description + '</p>';
  	contentString += '</div></div>'
  	contentString += '<button class="btn btn-info" onClick="respond()">Response to Flare</button>'
  	return contentString;
@@ -210,7 +214,7 @@ function newTask(){
 	var newTask = firebase.child('tasks').push({
 		title: $("#title").val(),
 		zip: $("#zip").val(),
-		duraction: $("#duration").val(),
+		duration: $("#duration").val(),
 		description: $("#description").val(),
 		lat: myLat,
 		lng: myLng,
@@ -254,6 +258,9 @@ function cancelTask(){
 	location.href = '/browse';
 }
 
+function respond(){
+	location.href = "/respond/" + taskSelected.id;
+}
 
 
 

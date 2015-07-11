@@ -25,3 +25,9 @@ exports.watch = function(req, res) {
     title: 'Watch'
   });
 };
+
+exports.respond = function(req, res) {
+  res.render('respond', {
+    title: 'Respond'
+  });
+};

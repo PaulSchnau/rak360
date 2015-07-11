@@ -1,0 +1,12 @@
+extends layout
+
+block content
+  .page-header
+    h3(id="name")
+    img(id="image")
+    form(method='POST')
+      p(id="chat")
+      .col-sm-12
+        .form-group
+          input.form-control(type='text', name='title', id='title', placeholder='Flare Title', autofocus=true)
+          button.btn.btn-primary(type='button' onClick="newTask()") Send
