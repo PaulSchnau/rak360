@@ -60,7 +60,7 @@ function continuousPosition(){
 					lng: myLng
 				});
 			}
-		}, null, {timeout:1000});
+		}, null, {timeout:5000});
 	}, 1000);
 }
 
