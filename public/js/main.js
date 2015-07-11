@@ -158,8 +158,9 @@ function updateUserMarker(user, marker){
 }
 
 function userString(user){
-	var string = '<p>' + user.name + '<p>';
+	var string = '<p>' + user.name + '</p>';
 	string += '<img height="60" width="60" src="' + user.image + '" class="img-circle pull-left">';
+	return string;
 }
 
 
