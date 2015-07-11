@@ -77,20 +77,52 @@ function addIncidentMarker(task){
 		infowindow.open(map,marker);
 	});
  	marker.setMap(map);
+ 	return marker;
 }
 
 function incidentString(task){
-	var contentString = '<div class="pull-right">';
- 	contentString += '<h5>' + task.title + '</h5>';
+	var contentString = '<div class="media"><div class="media-left">';
+ 	contentString += '<img height="64" width="64" src="' + task.user.image + '" class="img-circle media-object">'
+ 	contentString += '</div><div class="media-body"><div class="media-heading">';
+ 	contentString += '<h4>' + task.title + '</h4>';
  	contentString += '<p>' + task.user.name + '</p>';
- 	contentString += '</div>';
-
- 	contentString += '<div class="pull-left">';
- 	contentString += '<img height="60" width="60" src="' + task.user.image + '" class="img-circle pull-left">'
- 	contentString += '</div>';
  	contentString += '<p>' + task.description + '</p>';
+ 	contentString += '</div></div>'
  	return contentString;
 }
+
+function markerFromUser(user){
+	latLng = new google.maps.LatLng(user.lat,user.lng);
+	var marker = new google.maps.Marker({
+		position: latLng,
+		map: map,
+		title: user.name
+ 	});
+ 	var infowindow = new google.maps.InfoWindow({
+  			content: userString(user)
+		});
+	google.maps.event.addListener(marker, 'click', function() {
+		infowindow.open(map,marker);
+	});
+ 	marker.setMap(map);
+ 	return marker;
+}
+
+function updateUserMarker(user, marker){
+	//if(user.present != true){
+	//	marker.setMap(null);
+	//	return null;
+	//}
+	marker.setMap(map);
+	marker.setPosition(new google.maps.LatLng(user.lat,user.lng));
+	console.log('Moving marker');
+}
+
+function userString(user){
+	var string = '<p>' + user.name + '<p>';
+	string += '<img height="60" width="60" src="' + user.image + '" class="img-circle pull-left">';
+}
+
 
 function watchTask(){
 	var href = location.href;
@@ -108,6 +140,18 @@ function watchTask(){
 			addIncidentMarker(task);
 		}
 	});
+
+	var usersRef = firebase.child('users');
+	var users = {};
+	var userMarkers = {};
+
+	usersRef.on('value', function(snapshot){
+		users = snapshot.val();
+		for(var i=0; i < users.length; i++){
+			userMarkers[user.name()] = markerFromUser();
+			updateUserMarker(user, userMarkers[user.name()]);
+		}
+	})
 }
 
 function newTask(){
@@ -115,7 +159,7 @@ function newTask(){
 		title: $("#title").val(),
 		zip: $("#zip").val(),
 		duraction: $("#duration").val(),
-		description: $("description"),
+		description: $("#description").val(),
 		lat: myLat,
 		lng: myLng,
 		user: myUser
