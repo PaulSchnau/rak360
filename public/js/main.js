@@ -14,7 +14,7 @@ function loadMap(){
 	  center: { lat: myLat, lng: myLng},
 	  zoom: 15
 	};
-	var map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
+	map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
 
 	google.maps.event.addListenerOnce(map, 'idle', function(){
 		if (location.href.indexOf('browse') > 0 ){
