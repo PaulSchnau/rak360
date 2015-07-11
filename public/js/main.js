@@ -50,6 +50,7 @@ function loadData(){
 	 	contentString += '<div class="pull-left">';
 	 	contentString += '<img height="60" width="60" src="http://i.imgur.com/ejLNaAh.jpg" class="img-circle pull-left">'
 	 	contentString += '</div>';
+	 	contentString += '<p>' + task.description + '</p>'
 
 	 	var infowindow = new google.maps.InfoWindow({
       		content: contentString
@@ -61,3 +62,14 @@ function loadData(){
 	 	marker.setMap(map);
 	});
 }
+
+function newTask(){
+	firebase.child('tasks').push({
+		title: $("#title").val(),
+		zip: $("#zip").val(),
+		duraction: $("#duration").val(),
+		lat: myLat,
+		lng: myLng 
+	});
+}
+
