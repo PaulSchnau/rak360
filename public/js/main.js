@@ -4,6 +4,8 @@ myUser = {}
 myUserRef = null;
 userMarkers = {};
 trueLocation = false;
+taskID = null;
+taskRef = null;
 
 
 firebase = new Firebase("https://rak360.firebaseio.com/");
@@ -126,6 +128,7 @@ function incidentString(task){
  	contentString += '<p>' + task.user.name + '</p>';
  	contentString += '<p>' + task.description + '</p>';
  	contentString += '</div></div>'
+ 	contentString += '<button class="btn btn-info" onClick="respond()">Response to Flare</button>'
  	return contentString;
 }
 
@@ -158,7 +161,7 @@ function updateUserMarker(user, marker){
 }
 
 function userString(user){
-	var string = '<p>' + user.name + '</p>';
+	var string = '<p><b>' + user.name + '</b></p>';
 	string += '<img height="60" width="60" src="' + user.image + '" class="img-circle pull-left">';
 	return string;
 }
@@ -167,11 +170,11 @@ function userString(user){
 function watchTask(){
 	var href = location.href;
 	var watchindex = href.indexOf('watch');
-	var taskID = href.substring(watchindex+6, href.length);
+	taskID = href.substring(watchindex+6, href.length);
 	console.log(taskID);
 	var incidentMarker = false;
 
-	var taskRef = firebase.child('tasks').child(taskID);
+	taskRef = firebase.child('tasks').child(taskID);
 	taskRef.on('value', function(snapshot){
 		var task = snapshot.val();
 		if(incidentMarker != false){
@@ -244,6 +247,11 @@ function getName(authData) {
      case 'facebook':
        return authData.facebook.displayName;
   }
+}
+
+function cancelTask(){
+	taskRef.remove();
+	location.href = '/browse';
 }
 
 
