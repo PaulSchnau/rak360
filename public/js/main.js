@@ -31,9 +31,8 @@ if (location.href.indexOf('task') > 0){
 
 }
 
-setTimeout(function(){
-	navigator.geolocation.getCurrentPosition(function(position){
-		trueLocation = true;
+navigator.geolocation.getCurrentPosition(function(position){
+	trueLocation = true;
 		console.log('saving user geo position');
 		myLat = position.coords.latitude;
 		myLng = position.coords.longitude;
@@ -44,14 +43,26 @@ setTimeout(function(){
 				lng: myLng
 			});
 		}
-	}, null, {timeout:10000});
-}, 1000);
+		continuousPosition();
+	});
 
-var showPosition = function(position) {
-
-};
-
-
+function continuousPosition(){
+	setTimeout(function(){
+		navigator.geolocation.getCurrentPosition(function(position){
+			trueLocation = true;
+			console.log('saving user geo position');
+			myLat = position.coords.latitude;
+			myLng = position.coords.longitude;
+			console.log(myLat, myLng);
+			if(myUserRef != null){
+				myUserRef.update({
+					lat: myLat,
+					lng: myLng
+				});
+			}
+		}, null, {timeout:1000});
+	}, 1000);
+}
 
 
 //////////////////////
