@@ -3,6 +3,7 @@ myLng = -74.0059;
 myUser = {}
 myUserRef = null;
 userMarkers = {};
+trueLocation = false;
 
 
 firebase = new Firebase("https://rak360.firebaseio.com/");
@@ -26,8 +27,13 @@ if (location.href.indexOf('watch') > 0){
 	watchTask();
 }
 
+if (location.href.indexOf('task') > 0){
+
+}
+
 setTimeout(function(){
 	navigator.geolocation.getCurrentPosition(function(position){
+		trueLocation = true;
 		console.log('saving user geo position');
 		myLat = position.coords.latitude;
 		myLng = position.coords.longitude;
@@ -172,6 +178,14 @@ function watchTask(){
 }
 
 function newTask(){
+	if (myUser == {}){
+		alert('You are not logged in!');
+		return;
+	}
+	if (trueLocation == false){
+		alert('We could not get your location info.');
+		return;
+	}
 	var newTask = firebase.child('tasks').push({
 		title: $("#title").val(),
 		zip: $("#zip").val(),
