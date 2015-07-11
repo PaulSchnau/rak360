@@ -9,20 +9,26 @@ trueLocation = false;
 firebase = new Firebase("https://rak360.firebaseio.com/");
 firebase.onAuth(authDataCallback);
 
-var mapOptions = {
-  center: { lat: myLat, lng: myLng},
-  zoom: 15
-};
-var map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
+function loadMap(){
+	var mapOptions = {
+	  center: { lat: myLat, lng: myLng},
+	  zoom: 15
+	};
+	var map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
 
+	google.maps.event.addListenerOnce(map, 'idle', function(){
+		if (location.href.indexOf('browse') > 0 ){
+			loadMapData();
+		}
+	});
+}
 
-google.maps.event.addListenerOnce(map, 'idle', function(){
-	if (location.href.indexOf('browse') > 0 ){
-		loadMapData();
-	}
-});
+if (location.href.indexOf('browse') > 0){
+	loadMap();
+}
 
 if (location.href.indexOf('watch') > 0){
+	loadMap();
 	console.log('watch mode');
 	watchTask();
 }
