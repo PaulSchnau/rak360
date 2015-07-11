@@ -1,7 +1,23 @@
 myLat = 40.7127;
 myLng = -74.0059;
+myUser = {}
 
 var firebase = new Firebase("https://rak360.firebaseio.com/");
+firebase.onAuth(authDataCallback);
+
+function authDataCallback(authData) {
+  if (authData) {
+  	userID = authData.uid;
+	var myUserRef = firebase.child('users').child(userID);
+	myUserRef.on('value', function(snapshot){
+		myUser = snapshot.val();
+		console.log(myUser);
+	})
+    console.log("User " + authData.uid + " is logged in with " + authData.provider);
+  } else {
+    console.log("User is logged out");
+  }
+}
 
 
 var mapOptions = {
@@ -69,7 +85,36 @@ function newTask(){
 		zip: $("#zip").val(),
 		duraction: $("#duration").val(),
 		lat: myLat,
-		lng: myLng 
+		lng: myLng,
+		user: myUser
 	});
 }
 
+function authFacebook(){
+	firebase.authWithOAuthPopup("facebook", function(error, authData){
+	  if (error) {
+	    console.log("Login Failed!", error);
+	  } else {
+	    console.log("Authenticated successfully with payload:", authData);
+	    firebase.child("users").child(authData.uid).set({
+      		provider: authData.provider,
+      		name: getName(authData),
+      		image: authData.facebook.profileImageURL
+    	});
+    	location.href = "/browse";
+	  }
+	}, {scope: "email,user_likes"});
+}
+
+
+
+function getName(authData) {
+  switch(authData.provider) {
+     case 'password':
+       return authData.password.email.replace(/@.*/, '');
+     case 'twitter':
+       return authData.twitter.displayName;
+     case 'facebook':
+       return authData.facebook.displayName;
+  }
+}
