@@ -2,13 +2,15 @@ myLat = 40.7127;
 myLng = -74.0059;
 myUser = {}
 myUserRef = null;
+userMarkers = {};
+
 
 firebase = new Firebase("https://rak360.firebaseio.com/");
 firebase.onAuth(authDataCallback);
 
 var mapOptions = {
   center: { lat: myLat, lng: myLng},
-  zoom: 12
+  zoom: 15
 };
 var map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
 
@@ -19,24 +21,25 @@ google.maps.event.addListenerOnce(map, 'idle', function(){
 	}
 });
 
-if (location.href.indexOf('watch') > 1){
+if (location.href.indexOf('watch') > 0){
+	console.log('watch mode');
 	watchTask();
 }
 
-
-navigator.geolocation.getCurrentPosition(function(position){
-	myLat = position.coords.latitude;
-	myLng = position.coords.longitude;
-	console.log(myLat);
-	console.log(myLng);
-	console.log(myUserRef);
-	if(myUserRef != null){
-		myUserRef.update({
-			lat: myLat,
-			lng: myLng
-		});
-	}
-});
+setTimeout(function(){
+	navigator.geolocation.getCurrentPosition(function(position){
+		console.log('saving user geo position');
+		myLat = position.coords.latitude;
+		myLng = position.coords.longitude;
+		console.log(myLat, myLng);
+		if(myUserRef != null){
+			myUserRef.update({
+				lat: myLat,
+				lng: myLng
+			});
+		}
+	}, null, {timeout:10000});
+}, 1000);
 
 var showPosition = function(position) {
 
@@ -108,10 +111,11 @@ function markerFromUser(user){
 	var marker = new google.maps.Marker({
 		position: latLng,
 		map: map,
-		title: user.name
+		title: user.name,
+		icon: 'http://maps.google.com/mapfiles/ms/icons/green-dot.png'
  	});
  	var infowindow = new google.maps.InfoWindow({
-  			content: userString(user)
+  			content: userString(user),
 		});
 	google.maps.event.addListener(marker, 'click', function() {
 		infowindow.open(map,marker);
@@ -154,16 +158,17 @@ function watchTask(){
 	});
 
 	var usersRef = firebase.child('users');
-	var users = {};
-	var userMarkers = {};
-
 	usersRef.on('value', function(snapshot){
 		users = snapshot.val();
-		for(var i=0; i < users.length; i++){
-			userMarkers[user.name()] = markerFromUser();
-			updateUserMarker(user, userMarkers[user.name()]);
+		console.log(users);
+		for(var userID in users){
+			user = users[userID];
+			if (userMarkers[userID] == undefined){
+				userMarkers[userID] = markerFromUser(user);
+			}
+			updateUserMarker(user, userMarkers[userID]);
 		}
-	})
+	});
 }
 
 function newTask(){
