@@ -10,6 +10,7 @@ taskSelected = null;
 messagesRef = null;
 reponderMarker = null;
 responderMarker = null;
+loggedIn = false;
 
 var noPoi = [
 {
@@ -114,6 +115,7 @@ function authDataCallback(authData) {
 		myUser = snapshot.val();
 		myUser.id = snapshot.key();
 		console.log(myUser);
+		loggedIn = true;
 	});
     console.log("User " + authData.uid + " is logged in with " + authData.provider);
     forwardFromHome();
@@ -247,8 +249,9 @@ function watchTask(){
 }
 
 function newTask(){
-	if (myUser == null){
+	if (loggedIn == false){
 		alert('You are not logged in!');
+		location.href= '/';
 		return;
 	}
 	if (trueLocation == false){
