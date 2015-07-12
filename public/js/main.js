@@ -107,10 +107,17 @@ function authDataCallback(authData) {
 }
 
 function loadMapData(){
+	var markers = [];
+	var incidentBounds = new google.maps.LatLngBounds();
 	firebase.child("tasks").on("child_added", function(snapshot, prevChildKey) {
 		task = snapshot.val();
 		task.id = snapshot.key();
-		addIncidentMarker(task);
+		var newMarker = addIncidentMarker(task);
+		markers.push(newMarker);
+		for(i=0;i<markers.length;i++) {
+			incidentBounds.extend(markers[i].getPosition());
+		}
+		map.fitBounds(incidentBounds);
 	});
 }
 
