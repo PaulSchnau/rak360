@@ -319,6 +319,7 @@ function loadRespond(){
 		}
 
 		$("#description").text(task.description);
+		$("#time").text(task.duration + ' Minutes');
 		watchBoth(task);
 	});
 	taskRef.update({response: true});
@@ -363,6 +364,11 @@ function watchBoth(task){
 			reponderMarker = markerFromUser(responder);
 		} 
 		updateUserMarker(responder, reponderMarker);
+		responderLatLng = new google.maps.LatLng(responder.lat,responder.lng);
+		needyLatLng = new google.maps.LatLng(task.user.lat,task.user.lng);
+		distance = google.maps.geometry.spherical.computeDistanceBetween (responderLatLng, needyLatLng);
+		miles = Math.round(distance / 1609 * 100) / 100;
+		$("#miles").text(miles + ' Miles')
 	});
 	var bounds = new google.maps.LatLngBounds();
 	map.setZoom(16);
