@@ -7,6 +7,7 @@ trueLocation = false;
 taskID = null;
 taskRef = null;
 taskSelected = null;
+messagesRef = null;
 
 
 firebase = new Firebase("https://rak360.firebaseio.com/");
@@ -36,8 +37,8 @@ if (location.href.indexOf('watch') > 0){
 	watchTask();
 }
 
-if (location.href.indexOf('task') > 0){
-
+if (location.href.indexOf('respond') > 0){
+	loadRespond();
 }
 
 navigator.geolocation.getCurrentPosition(function(position){
@@ -262,6 +263,37 @@ function respond(){
 	location.href = "/respond/" + taskSelected.id;
 }
 
+function loadRespond(){
+	var href = location.href;
+	var watchindex = href.indexOf('respond');
+	taskID = href.substring(watchindex+8, href.length);
+	console.log(taskID);
+
+	taskRef = firebase.child('tasks').child(taskID);
+	taskRef.on('value', function(snapshot){
+		var task = snapshot.val();
+		console.log(task);
+		$('#name').text(task.user.name);
+		$('#image').attr("src", task.user.image);
+		$("#description").text(task.description);
+	});
+
+	messagesRef = taskRef.child('messages');
+	messagesRef.on('child_added', function(snapshot){
+		var message = snapshot.val();
+		var html = '<div>' + message.name + ": " + message.text + "</div>";
+		$("#chat").append(html);
+	});
+}
+
+function sendMessage(){
+	var message = $('#message').val();
+	messagesRef.push({
+		text: message,
+		name: myUser.name
+	})
+	var message = $('#message').val('');
+}
 
 
 

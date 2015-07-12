@@ -2,11 +2,17 @@ extends layout
 
 block content
   .page-header
-    h3(id="name")
-    img(id="image")
+  .media
+    .media-left
+      img.media-object(id="image")
+    .media-body
+        h4.media-heading(id="name")
+        div(id="description")
     form(method='POST')
-      p(id="chat")
+      div.well(style="min-height: 200px; max-height: 200px" id="chat")
       .col-sm-12
         .form-group
-          input.form-control(type='text', name='title', id='title', placeholder='Flare Title', autofocus=true)
-          button.btn.btn-primary(type='button' onClick="newTask()") Send
+          .col-xs-10
+            input.form-control(placeholder='Flare Title', id="message", autofocus=true)
+          .col-xs-2
+            button.btn.btn-primary(type='button' onClick="sendMessage()") Send
