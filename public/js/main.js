@@ -38,7 +38,9 @@ if (location.href.indexOf('watch') > 0){
 }
 
 if (location.href.indexOf('respond') > 0){
+		loadMap();
 	loadRespond();
+
 }
 
 navigator.geolocation.getCurrentPosition(function(position){
@@ -201,6 +203,8 @@ function watchTask(){
 			updateUserMarker(user, userMarkers[userID]);
 		}
 	});
+
+	taskRef.on('value')
 }
 
 function newTask(){
@@ -277,6 +281,7 @@ function loadRespond(){
 		$('#image').attr("src", task.user.image);
 		$("#description").text(task.description);
 	});
+	taskRef.update({response: true});
 
 	messagesRef = taskRef.child('messages');
 	messagesRef.on('child_added', function(snapshot){

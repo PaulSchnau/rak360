@@ -1,18 +1,24 @@
 extends layout
 
 block content
+  style(type='text/css').
+    #map-canvas { height: 400px; width: 100%; padding: 0;}
   .page-header
-  .media
-    .media-left
-      img.media-object(id="image")
-    .media-body
-        h4.media-heading(id="name")
-        div(id="description")
-    form(onsubmit="sendMessage(); return false;")
-      div.well(style="min-height: 200px; max-height: 200px; overflow-y:scroll;" id="chat")
-      .col-sm-12
-        .form-group
-          .col-xs-10
-            input.form-control(placeholder='Flare Title', id="message", autofocus=true)
-          .col-xs-2
-            button.btn.btn-primary(type='button' onClick="sendMessage()") Send
+  .container
+    .col-md-6
+      .media
+        .media-left
+          img.media-object(id="image")
+        .media-body
+            h4.media-heading(id="name")
+            div(id="description")
+        form(onsubmit="sendMessage(); return false;")
+          div.well(style="min-height: 200px; max-height: 200px; overflow-y:scroll;" id="chat")
+          .col-sm-12
+            .form-group
+              .col-xs-10
+                input.form-control(placeholder='Flare Title', id="message", autofocus=true)
+              .col-xs-2
+                button.btn.btn-primary(type='button' onClick="sendMessage()") Send
+    .col-md-6
+      #map-canvas
