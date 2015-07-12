@@ -11,6 +11,17 @@ messagesRef = null;
 reponderMarker = null;
 responderMarker = null;
 
+var noPoi = [
+{
+    featureType: "poi",
+    stylers: [
+      { visibility: "off" }
+    ]   
+  }
+];
+
+
+
 
 firebase = new Firebase("https://rak360.firebaseio.com/");
 firebase.onAuth(authDataCallback);
@@ -21,6 +32,7 @@ function loadMap(){
 	  zoom: 15
 	};
 	map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
+	map.setOptions({styles: noPoi});
 
 	google.maps.event.addListenerOnce(map, 'idle', function(){
 		if (location.href.indexOf('browse') > 0 ){
@@ -143,7 +155,7 @@ function addIncidentMarker(task){
 }
 
 function incidentString(task){
-	var contentString = '<div class="media"><div class="media-left">';
+	var contentString = '<div class="media" style="max-width: 300px;"><div class="media-left">';
  	contentString += '<img height="64" width="64" src="' + task.user.image + '" class="img-circle media-object">'
  	contentString += '</div><div class="media-body"><div class="media-heading">';
  	contentString += '<h4>' + task.title + '</h4>';

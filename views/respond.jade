@@ -3,7 +3,6 @@ extends layout
 block content
   style(type='text/css').
     #map-canvas { height: 400px; width: 100%; padding: 0;}
-  .page-header
   .container
     .col-md-6
       .media
@@ -19,7 +18,7 @@ block content
           .col-sm-12
             .form-group
               .col-xs-10
-                input.form-control(placeholder='Flare Title', id="message", autofocus=true)
+                input.form-control(placeholder='Send a message', id="message", autofocus=true)
               .col-xs-2
                 button.btn.btn-primary(type='button' onClick="sendMessage()") Send
     .col-md-6
