@@ -67,7 +67,7 @@ navigator.geolocation.getCurrentPosition(function(position){
 	});
 
 function continuousPosition(){
-	setTimeout(function(){
+	setInterval(function(){
 		navigator.geolocation.getCurrentPosition(function(position){
 			trueLocation = true;
 			console.log('saving user geo position');
