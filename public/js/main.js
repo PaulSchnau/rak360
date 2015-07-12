@@ -82,10 +82,8 @@ function continuousPosition(){
 	setInterval(function(){
 		navigator.geolocation.getCurrentPosition(function(position){
 			trueLocation = true;
-			console.log('saving user geo position');
 			myLat = position.coords.latitude;
 			myLng = position.coords.longitude;
-			console.log(myLat, myLng);
 			if(myUserRef != null){
 				myUserRef.update({
 					lat: myLat,
@@ -138,7 +136,8 @@ function addIncidentMarker(task){
 	var marker = new google.maps.Marker({
 		position: latLng,
 		map: map,
-		title: task.title
+		title: task.title,
+		icon: 'http://maps.google.com/mapfiles/ms/icons/pink-dot.png'
  	});
  	var infowindow = new google.maps.InfoWindow({
   			content: incidentString(task)
@@ -155,11 +154,15 @@ function addIncidentMarker(task){
 }
 
 function incidentString(task){
+	var d = new Date();
+	var now = d.getTime();
+	var difference = now - task.created_at;
+	var minutesAgo = Math.round(difference / 1000 / 60);
 	var contentString = '<div class="media" style="max-width: 300px;"><div class="media-left">';
  	contentString += '<img height="64" width="64" src="' + task.user.image + '" class="img-circle media-object">'
  	contentString += '</div><div class="media-body"><div class="media-heading">';
  	contentString += '<h4>' + task.title + '</h4>';
- 	contentString += '<p>' + task.user.name + '</p>';
+ 	contentString += '<p>' + task.user.name + ' - <small>'+ minutesAgo + ' minutes ago</small></p>';
  	contentString += '<p>' + task.duration + ' Minutes - ' + task.description + '</p>';
  	contentString += '</div></div>'
  	contentString += '<button class="btn btn-info" onClick="respond()">Response to Flare</button>'
@@ -250,7 +253,8 @@ function newTask(){
 		description: $("#description").val(),
 		lat: myLat,
 		lng: myLng,
-		user: myUser
+		user: myUser,
+		created_at: Firebase.ServerValue.TIMESTAMP
 	});
 	var id = newTask.name();
 	console.log(newTask);

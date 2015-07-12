@@ -8,13 +8,13 @@ block content
     input(type='hidden', name='_csrf', value=_csrf)
     .col-sm-8.col-sm-offset-2
       .form-group
-        label.control-label(for='title') Title
+        label.control-label(for='title', style="color: #3A2AD8") Title
         input.form-control(type='text', name='title', id='title', placeholder='Flare Title', autofocus=true)
       //-.form-group
         label.control-label(for='zip') Zip Code
         input.form-control(type='text', name='zip', id='zip', placeholder='10013')
       .form-group
-        label.control-label(for='duration') Duration
+        label.control-label(for='duration', style="color: #3A2AD8") Duration
         select.form-control(type='text', name='duration', id='duration', placeholder='30 Minutes')
           option(value='15') 15 Minutes
           option(value='30') 30 Minutes 
@@ -22,8 +22,8 @@ block content
           option(value='120') 2 Hours
           option(value='240') 4 Hours
       .form-group
-        label.control-label(for='description') Description
+        label.control-label(for='description', style="color: #3A2AD8") Description
         textarea.form-control(type='textarea', name='description', id='description', placeholder="I need to change the tire on my car, but I don't have a jack")
       .form-group
-        button.btn.btn-primary(type='button' onClick="newTask()")
+        button.btn.btn-danger(type='button' onClick="newTask()")
           | Shoot Flare
