@@ -25,8 +25,8 @@ script(type='text/javascript', src='https://maps.googleapis.com/maps/api/js?key=
           a(href='/contact') Contact
       ul.nav.navbar-nav.navbar-right
         if !user
-          //-li(class=title=='Login'?'active':undefined)
-            a(href='/') Login
+          li(class=title=='Logout'?'active':undefined)
+            a(href="#", onclick="logout()") Logout
           //-li(class=title=='Create Account'?'active':undefined)
             a(href='/signup') Create Account
         else

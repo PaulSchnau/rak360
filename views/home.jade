@@ -6,12 +6,14 @@ block content
   .row
     .container
       .col-sm-offset-4.col-sm-4
-        a(href="#", onClick="authFacebook()") Facebook
+        a.btn.btn-block.btn-facebook.btn-social(onClick="authFacebook()" href="#")
+          i.fa.fa-facebook
+          | Sign in with Facebook
+        br
       .col-sm-offset-4.col-sm-4
-        a(href='/api/twitter', style='color: #fff')
-          .panel.panel-default(style='background-color: #00abf0')
-            .panel-body
-              img(src='http://i.imgur.com/EYA2FO1.png', height=40)
-              |  Twitter
-        p
-          a.btn.btn-default(href='/browse', role='button') Browse requests near you »
+        a.btn.btn-block.btn-twitter.btn-social(onClick="authTwitter()" href="#")
+          i.fa.fa-twitter
+          | Sign in with Twitter
+        br
+        a.btn.btn-default(href='/browse', role='button') Browse requests near you »
+  div(id="youareonthehomepage")

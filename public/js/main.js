@@ -42,8 +42,14 @@ if (location.href.indexOf('watch') > 0){
 if (location.href.indexOf('respond') > 0){
 	loadMap();
 	loadRespond();
-
 }
+
+function forwardFromHome(){
+	if($("#youareonthehomepage").length == 1){
+		location.href="/browse";
+	}
+}
+
 
 navigator.geolocation.getCurrentPosition(function(position){
 	trueLocation = true;
@@ -94,6 +100,7 @@ function authDataCallback(authData) {
 		console.log(myUser);
 	});
     console.log("User " + authData.uid + " is logged in with " + authData.provider);
+    forwardFromHome();
   } else {
     console.log("User is logged out");
   }
@@ -186,6 +193,7 @@ function watchTask(){
 			incidentMarker.setPosition(new google.maps.LatLng(task.lat,task.lng));
 		} else {
 			addIncidentMarker(task);
+			map.setCenter(new google.maps.LatLng(task.lat,task.lng));
 		}
 		console.log(task.responder);
 		if(task.responder != null){
@@ -218,7 +226,7 @@ function newTask(){
 	}
 	var newTask = firebase.child('tasks').push({
 		title: $("#title").val(),
-		zip: $("#zip").val(),
+		//zip: $("#zip").val(),
 		duration: $("#duration").val(),
 		description: $("#description").val(),
 		lat: myLat,
@@ -241,6 +249,23 @@ function authFacebook(){
       		provider: authData.provider,
       		name: getName(authData),
       		image: authData.facebook.profileImageURL
+    	});
+    	location.href = "/browse";
+	  }
+	}, {scope: "email,user_likes"});
+}
+
+function authTwitter(){
+	firebase.authWithOAuthPopup("twitter", function(error, authData){
+	  if (error) {
+	    console.log("Login Failed!", error);
+	  } else {
+	    console.log("Authenticated successfully with payload:", authData);
+	    myUserRef = firebase.child("users").child(authData.uid);
+	    myUserRef.update({
+      		provider: authData.provider,
+      		name: getName(authData),
+      		image: authData.twitter.profileImageURL
     	});
     	location.href = "/browse";
 	  }
@@ -346,6 +371,10 @@ function watchBoth(task){
 	map.fitBounds(bounds);
 }
 
+function logout(){
+	firebase.unauth();
+	location.href= "/";
+}
 
 
 
