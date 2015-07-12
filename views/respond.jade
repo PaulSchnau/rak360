@@ -7,10 +7,10 @@ block content
     .col-md-6
       .media
         .media-left
-          img.media-object(id="image")
+          img.media-object.img-circle(id="image" height="64" width="64")
         .media-body
-            h4.media-heading(id="name")
-            div(id="time")
+            div(id="name")
+            //-div(id="time")
             div(id="description")
             div(id="miles")
         form(onsubmit="sendMessage(); return false;")
