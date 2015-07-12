@@ -45,25 +45,34 @@ var app = express();
 
 var Firebase = require("firebase");
 var cps = require('./node_modules/cps-api');
-var conn = new cps.Connection('tcp://cloud-eu-0.clusterpoint.com:9007', 'rak', 'server@rak360.herokuapp.com', 'server', 'document', 'document/id', {account: 1357});
+var conn = new cps.Connection('tcp://cloud-eu-0.clusterpoint.com:9007', 'rak', 'playton50@gmail.com', 'space50', 'document', 'document/id', {account: 1357});
 var myFirebaseRef = new Firebase("https://rak360.firebaseio.com/");
 
 myFirebaseRef.child('users').on('child_added', function(snapshot){
   var user = snapshot.val();
+  user.id = snapshot.key();
   console.log(user);
-  //user.id = snapshot.key();
-  //conn.sendRequest(new cps.InsertRequest(user), function (err, resp) {
-  //  if (err) return console.error(err); // Handle error 
-  //  });
+  conn.sendRequest(new cps.InsertRequest(user), function (err, resp) {
+    if (err) return console.error(err); // Handle error 
+  });
+  conn.sendRequest(new cps.UpdateRequest(user), function (err, resp) {
+    if (err) return console.error(err); // Handle error 
+  });
 });
 
 
 myFirebaseRef.child('tasks').on('child_added', function(snapshot){
   var task = snapshot.val();
-  //task.id = snapshot.key();
-  //conn.sendRequest(new cps.InsertRequest(task), function (err, resp) {
-  //  if (err) return console.error(err); // Handle error 
-  //  });
+  task.id = snapshot.key();
+  task.messages = {};
+  task.user = {};
+  console.log(task);
+  conn.sendRequest(new cps.InsertRequest(task), function (err, resp) {
+    if (err) return console.error(err); // Handle error 
+  });
+  conn.sendRequest(new cps.UpdateRequest(task), function (err, resp) {
+    if (err) return console.error(err); // Handle error 
+  });
 });
 
 
