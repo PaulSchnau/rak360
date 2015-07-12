@@ -176,7 +176,7 @@ function incidentString(task){
  	contentString += '<p>' + task.user.name + ' - <small>'+ minutesAgo + ' minutes ago</small></p>';
  	contentString += '<p>' + task.duration + ' Minutes - ' + task.description + '</p>';
  	contentString += '</div></div>'
- 	contentString += '<button class="btn btn-info" onClick="respond()">Response to Flare</button>'
+ 	contentString += '<button class="btn btn-info" onClick="respond()">Respond to Flare</button>'
  	return contentString;
 }
 
@@ -324,6 +324,11 @@ function cancelTask(){
 }
 
 function respond(){
+	if (loggedIn == false){
+		alert('You are not logged in!');
+		location.href= '/';
+		return;
+	}
 	firebase.child('tasks').child(taskSelected.id).update({
 		responder: myUser.id
 	})
@@ -374,7 +379,8 @@ function sendMessage(){
 	if(message == '') return false;
 	messagesRef.push({
 		text: message,
-		name: myUser.name
+		name: myUser.name,
+		image: myUser.image
 	})
 	var message = $('#message').val('');
 	scrollChat();

@@ -13,9 +13,10 @@ block content
             //-div(id="time")
             div(id="description")
             div(id="miles")
+        br
         form(onsubmit="sendMessage(); return false;")
           div.well(style="min-height: 200px; max-height: 200px; overflow-y:scroll;" id="chat")
-          .col-sm-12
+          .row
             .form-group
               .col-xs-10
                 input.form-control(placeholder='Send a message', id="message", autofocus=true)
