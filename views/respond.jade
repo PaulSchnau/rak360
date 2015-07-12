@@ -8,8 +8,8 @@ block content
     .media-body
         h4.media-heading(id="name")
         div(id="description")
-    form(method='POST')
-      div.well(style="min-height: 200px; max-height: 200px" id="chat")
+    form(onsubmit="sendMessage(); return false;")
+      div.well(style="min-height: 200px; max-height: 200px; overflow-y:scroll;" id="chat")
       .col-sm-12
         .form-group
           .col-xs-10

@@ -284,17 +284,30 @@ function loadRespond(){
 		var html = '<div>' + message.name + ": " + message.text + "</div>";
 		$("#chat").append(html);
 	});
+
+	scrollChat();
 }
 
 function sendMessage(){
 	var message = $('#message').val();
+	if(message == '') return false;
 	messagesRef.push({
 		text: message,
 		name: myUser.name
 	})
 	var message = $('#message').val('');
+	scrollChat();
+	return false;
 }
 
+function scrollChat(){
+	var height = 0;
+	$('#chat div').each(function(i, value){
+	    height += parseInt($(this).height());
+	});
+	height += '';
+	$('#chat').animate({scrollTop: height});
+}
 
 
 
