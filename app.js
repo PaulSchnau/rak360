@@ -51,7 +51,6 @@ var myFirebaseRef = new Firebase("https://rak360.firebaseio.com/");
 myFirebaseRef.child('users').on('child_added', function(snapshot){
   var user = snapshot.val();
   user.id = snapshot.key();
-  console.log(user);
   conn.sendRequest(new cps.InsertRequest(user), function (err, resp) {
     if (err) return console.error(err); // Handle error 
   });
@@ -66,7 +65,6 @@ myFirebaseRef.child('tasks').on('child_added', function(snapshot){
   task.id = snapshot.key();
   task.messages = {};
   task.user = {};
-  console.log(task);
   conn.sendRequest(new cps.InsertRequest(task), function (err, resp) {
     if (err) return console.error(err); // Handle error 
   });

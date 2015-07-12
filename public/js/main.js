@@ -29,8 +29,14 @@ firebase.onAuth(authDataCallback);
 function loadMap(){
 	var mapOptions = {
 	  center: { lat: myLat, lng: myLng},
-	  zoom: 15
-	};
+	  zoom: 10,
+	  disableDefaultUI: true, // a way to quickly hide all controls
+	    mapTypeControl: true,
+	    scaleControl: true,
+	    zoomControl: true,
+	    mapTypeId: google.maps.MapTypeId.ROADMAP,
+	    mapTypeControl: false
+	  };
 	map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
 	map.setOptions({styles: noPoi});
 
@@ -128,6 +134,9 @@ function loadMapData(){
 			incidentBounds.extend(markers[i].getPosition());
 		}
 		map.fitBounds(incidentBounds);
+		if (map.getZoom() > 15){
+			map.setZoom(15);
+		}
 	});
 }
 
