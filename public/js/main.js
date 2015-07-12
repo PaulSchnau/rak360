@@ -8,6 +8,8 @@ taskID = null;
 taskRef = null;
 taskSelected = null;
 messagesRef = null;
+reponderMarker = null;
+responderMarker = null;
 
 
 firebase = new Firebase("https://rak360.firebaseio.com/");
@@ -38,7 +40,7 @@ if (location.href.indexOf('watch') > 0){
 }
 
 if (location.href.indexOf('respond') > 0){
-		loadMap();
+	loadMap();
 	loadRespond();
 
 }
@@ -88,6 +90,7 @@ function authDataCallback(authData) {
 	myUserRef = firebase.child('users').child(userID);
 	myUserRef.on('value', function(snapshot){
 		myUser = snapshot.val();
+		myUser.id = snapshot.key();
 		console.log(myUser);
 	});
     console.log("User " + authData.uid + " is logged in with " + authData.provider);
@@ -99,7 +102,7 @@ function authDataCallback(authData) {
 function loadMapData(){
 	firebase.child("tasks").on("child_added", function(snapshot, prevChildKey) {
 		task = snapshot.val();
-		task.id = prevChildKey;
+		task.id = snapshot.key();
 		addIncidentMarker(task);
 	});
 }
@@ -116,12 +119,10 @@ function addIncidentMarker(task){
 		});
 	google.maps.event.addListener(marker, 'click', function() {
 		infowindow.open(map,marker);
-	});
-
-	google.maps.event.addListener(marker, 'click', function() {
-    	taskSelected = task;
+		taskSelected = task;
+		console.log(task);
     	map.setCenter(marker.getPosition());
-  	});
+	});
 
  	marker.setMap(map);
  	return marker;
@@ -158,13 +159,8 @@ function markerFromUser(user){
 }
 
 function updateUserMarker(user, marker){
-	//if(user.present != true){
-	//	marker.setMap(null);
-	//	return null;
-	//}
 	marker.setMap(map);
 	marker.setPosition(new google.maps.LatLng(user.lat,user.lng));
-	console.log('Moving marker');
 }
 
 function userString(user){
@@ -182,12 +178,18 @@ function watchTask(){
 	var incidentMarker = false;
 
 	taskRef = firebase.child('tasks').child(taskID);
-	taskRef.on('value', function(snapshot){
+	taskRef.on('value', function(snapshot, prevChildKey){
 		var task = snapshot.val();
+		task.id = snapshot.key();
+		console.log(task);
 		if(incidentMarker != false){
 			incidentMarker.setPosition(new google.maps.LatLng(task.lat,task.lng));
 		} else {
 			addIncidentMarker(task);
+		}
+		console.log(task.responder);
+		if(task.responder != null){
+			location.href = "/respond/" + task.id;
 		}
 	});
 
@@ -203,8 +205,6 @@ function watchTask(){
 			updateUserMarker(user, userMarkers[userID]);
 		}
 	});
-
-	taskRef.on('value')
 }
 
 function newTask(){
@@ -264,6 +264,9 @@ function cancelTask(){
 }
 
 function respond(){
+	firebase.child('tasks').child(taskSelected.id).update({
+		responder: myUser.id
+	})
 	location.href = "/respond/" + taskSelected.id;
 }
 
@@ -273,13 +276,25 @@ function loadRespond(){
 	taskID = href.substring(watchindex+8, href.length);
 	console.log(taskID);
 
+	
+
 	taskRef = firebase.child('tasks').child(taskID);
 	taskRef.on('value', function(snapshot){
 		var task = snapshot.val();
-		console.log(task);
-		$('#name').text(task.user.name);
-		$('#image').attr("src", task.user.image);
+		if (task.user.name != myUser.name){
+			$('#name').text(task.user.name);
+			$('#image').attr("src", task.user.image);
+		} else{
+			responderRef = firebase.child('users').child(task.responder);
+			responderRef.on('value', function(snapshot){
+				var responder = snapshot.val();
+				$('#name').text(responder.name);
+				$('#image').attr("src", responder.image);
+			})
+		}
+
 		$("#description").text(task.description);
+		watchBoth(task);
 	});
 	taskRef.update({response: true});
 
@@ -288,9 +303,9 @@ function loadRespond(){
 		var message = snapshot.val();
 		var html = '<div>' + message.name + ": " + message.text + "</div>";
 		$("#chat").append(html);
+		scrollChat();	
 	});
 
-	scrollChat();
 }
 
 function sendMessage(){
@@ -314,6 +329,22 @@ function scrollChat(){
 	$('#chat').animate({scrollTop: height});
 }
 
+function watchBoth(task){
+	needyMarker = markerFromUser(task.user);
+	responderRef = firebase.child('users').child(task.responder);
+	responderRef.on("value", function(snapshot){
+		var responder = snapshot.val();
+		if (reponderMarker == null){
+			reponderMarker = markerFromUser(responder);
+		} 
+		updateUserMarker(responder, reponderMarker);
+	});
+	var bounds = new google.maps.LatLngBounds();
+	map.setZoom(16);
+	bounds.extend(needyMarker.getPosition());
+	bounds.extend(reponderMarker.getPosition());
+	map.fitBounds(bounds);
+}
 
 
 
