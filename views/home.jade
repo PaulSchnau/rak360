@@ -1,12 +1,21 @@
 extends layout
 
 block content
-  h1(align="center") RAK360
-  hr
+  style(type="text/css").
+    html, div, body { 
+    background: url(/background.png) no-repeat center center fixed; 
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    }
+  h1(align="center")
+    img(src="logo.png" height="120" width="160")
+  p.lead(align="center", style='color: #0000FF') Make a difference in the world today
   .row
     .container
       .col-sm-offset-4.col-sm-4
-        a.btn.btn-block.btn-facebook.btn-social(onClick="authFacebook()" href="#")
+        a.btn.btn-block.btn-facebook.btn-social(onClick="authFacebook()" href="#" style='color: #fff')
           i.fa.fa-facebook
           | Sign in with Facebook
         br
