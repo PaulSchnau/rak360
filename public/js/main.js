@@ -1,6 +1,6 @@
 myLat = 40.7127;
 myLng = -74.0059;
-myUser = {}
+myUser = null;
 myUserRef = null;
 userMarkers = {};
 trueLocation = false;
@@ -247,7 +247,7 @@ function watchTask(){
 }
 
 function newTask(){
-	if (myUser == {}){
+	if (myUser == null){
 		alert('You are not logged in!');
 		return;
 	}
