@@ -3,7 +3,7 @@ extends layout
 block content
   style(type="text/css").
     html, div, body { 
-    background: url(/background.png) no-repeat center center fixed; 
+    background: url(/background_tall.png) no-repeat center center fixed; 
     -webkit-background-size: cover;
     -moz-background-size: cover;
     -o-background-size: cover;
@@ -24,5 +24,9 @@ block content
           i.fa.fa-twitter
           | Sign in with Twitter
         br
-        a.btn.btn-default(href='/browse', role='button') Browse requests near you »
+        br
+        br
+        div(align="center")
+          img(src="http://i.imgur.com/XFdT4z2.png" height="40" width="20")
+          a(href='/browse', style="color: #FFF") &nbsp;&nbsp;Browse Tasks Near You 
   div(id="youareonthehomepage")
